@@ -114,6 +114,11 @@ def get_player_data(year, players):
             
         try:
             conn = mongo_connect(MONGO_URI)
+        except pymongo.errors.ConnectionFailure as e:
+            print("Could not connect to MongoDB: %s") % e
+            return ()
+        
+        try:
             coll = conn[DATABASE][COLLECTION]
             doc = coll.find_one({"first": players[0], "last": players[1]})
             pff = doc['pff_grade']
@@ -135,11 +140,8 @@ def mongo_connect(url):
     """Connect to MongoDB QBStew Cluster"""
     
     print("Connecting to MongoDB...")
-    try:
-        conn = pymongo.MongoClient(url)
-        return conn
-    except pymongo.errors.ConnectionFailure as e:
-        print("Could not connect to MongoDB: %s") % e
+    conn = pymongo.MongoClient(url)
+    return conn
         
 
 def analyze_player_data(player_data):
