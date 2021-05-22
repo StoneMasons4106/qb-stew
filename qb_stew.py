@@ -114,8 +114,8 @@ def get_player_data(year, players):
             
         try:
             conn = mongo_connect(MONGO_URI)
-        except pymongo.errors.ConnectionFailure as e:
-            print("Could not connect to MongoDB: %s") % e
+        except:
+            print("Could not connect to MongoDB")
             return 'Database connection error'
         
         try:
