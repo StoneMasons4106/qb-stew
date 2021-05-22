@@ -37,9 +37,9 @@ def input_player_data():
             confirmation = input("Do you wish to add another player? Y or N: ")
             print("")
             
-            if confirmation == 'n':
+            if confirmation == 'n' or confirmation == 'N':
                 return players
-            elif confirmation != 'y':
+            elif confirmation != 'y' or confirmation != 'Y':
                 print("Invalid input, please input Y or N.")
             else:
                 break
