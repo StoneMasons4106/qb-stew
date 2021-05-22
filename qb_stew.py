@@ -116,7 +116,7 @@ def get_player_data(year, players):
             conn = mongo_connect(MONGO_URI)
         except pymongo.errors.ConnectionFailure as e:
             print("Could not connect to MongoDB: %s") % e
-            return ()
+            return 'Database connection error'
         
         try:
             coll = conn[DATABASE][COLLECTION]
@@ -205,16 +205,21 @@ def main_loop():
             player_data_list = []
             for players in players_list:
                 player_data = get_player_data(year, players)
-                if player_data is None:
+                if player_data == 'Database connection error':
+                    break
+                elif player_data is None:
                     pass
                 else:
                     for i in player_data:
                         players.append(i)
                     player_data_list.append(players)
-            df = analyze_player_data(player_data_list)
-            print("")
-            print(df)
-            export_to_excel(df)
+            if player_data == 'Database connection error':
+                print('Unable to complete analysis due to being unable to access the database')
+            else:
+                df = analyze_player_data(player_data_list)
+                print("")
+                print(df)
+                export_to_excel(df)
         elif option == "2":
             break
         else:
