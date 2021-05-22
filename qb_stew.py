@@ -39,10 +39,10 @@ def input_player_data():
             
             if confirmation == 'n' or confirmation == 'N':
                 return players
-            elif confirmation != 'y' or confirmation != 'Y':
-                print("Invalid input, please input Y or N.")
-            else:
+            elif confirmation == 'y' or confirmation == 'Y':
                 break
+            else:
+                print("Invalid input, please input Y or N.")
 
 
 def search_player(first_name, last_name, pos):
@@ -171,7 +171,7 @@ def analyze_player_data(player_data):
     df_last_sort = df_epa_sort.sort_values(by=['last'], ascending=True)
     df_last_sort['qb stew'] = (df_last_sort['rating rank'] + df_last_sort['qbr rank'] + df_last_sort['anya rank'] + df_last_sort['pff rank'] + df_last_sort['dvoa rank'] + df_last_sort['cpoe rank'] + df_last_sort['epa rank']) / 7
     
-    df_final = df_last_sort
+    df_final = df_last_sort.sort_values(by=['qb stew'], ascending=True)
     return df_final
 
 
