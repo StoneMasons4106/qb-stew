@@ -219,7 +219,7 @@ def main_loop():
             print("That is not a valid option. Please choose either 1 or 2.")
         
 
-MONGO_URI = "mongodb+srv://guest:canyouguessthis@qbdata.2dvh9.mongodb.net/Stew?retryWrites=true&w=majority"
+MONGO_URI = "mongodb+srv://user:pa55w0r6@qbdata.2dvh9.mongodb.net/Stew?retryWrites=true&w=majority"
 DATABASE = "Stew"        
 
 
