@@ -126,6 +126,8 @@ def get_player_data(year, players):
             cpoe = doc['cpoe']
             epa = doc['epa']
 
+            conn.close()
+            
             return float(rating), float(qbr), float(anya), float(pff), float(dvoa), float(cpoe), float(epa)
 
         except:
