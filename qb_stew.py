@@ -112,26 +112,7 @@ def get_player_data(year, players):
         except:
             anya = anya_split_two[0]
             
-        try:
-            conn = mongo_connect(MONGO_URI)
-        except:
-            print("Could not connect to MongoDB")
-            return 'Database connection error'
-        
-        try:
-            coll = conn[DATABASE][COLLECTION]
-            doc = coll.find_one({"first": players[0], "last": players[1]})
-            pff = doc['pff_grade']
-            dvoa = doc['dvoa']
-            cpoe = doc['cpoe']
-            epa = doc['epa']
-
-            conn.close()
-            
-            return float(rating), float(qbr), float(anya), float(pff), float(dvoa), float(cpoe), float(epa)
-
-        except:
-            print("No matching record for " + players[0] + " " + players[1] + " in our database.")
+        return float(rating), float(qbr), float(anya)
 
     except:
         print('No data found for ' + players[0] + ' ' + players[1])
@@ -142,9 +123,34 @@ def mongo_connect(url):
     """Connect to MongoDB QBStew Cluster"""
     
     print("Connecting to MongoDB...")
-    conn = pymongo.MongoClient(url)
-    return conn
-        
+    try:    
+        conn = pymongo.MongoClient(url)
+        coll = conn[DATABASE][COLLECTION]
+        return conn, coll
+    except:
+        print("Could not connect to MongoDB")
+        return 'Database connection error'
+
+
+def get_mongo_data(players, conn, coll):
+
+    mongo_player_data = []
+
+    for player in players:
+        try:    
+            doc = coll.find_one({"first": player[0], "last": player[1]})
+        except:
+            print('No data found for ' + player[0] + ' ' + player[1] + ' in our database')
+            continue
+        pff = doc['pff_grade']
+        dvoa = doc['dvoa']
+        cpoe = doc['cpoe']
+        epa = doc['epa']
+        mongo_player_data.append([float(pff), float(dvoa), float(cpoe), float(epa)])
+
+    conn.close()
+
+    return mongo_player_data
 
 def analyze_player_data(player_data):
     
@@ -207,18 +213,22 @@ def main_loop():
             player_data_list = []
             for players in players_list:
                 player_data = get_player_data(year, players)
-                if player_data == 'Database connection error':
-                    break
-                elif player_data is None:
+                if player_data is None:
                     pass
                 else:
                     for i in player_data:
                         players.append(i)
                     player_data_list.append(players)
-            if player_data == 'Database connection error':
+            connection = mongo_connect(MONGO_URI)
+            if connection == 'Database connection error':
                 print('Unable to complete analysis due to being unable to access the database')
             else:
-                df = analyze_player_data(player_data_list)
+                mongo_data = get_mongo_data(players_list, connection[0], connection[1])
+                df_list = []
+                for (i, j) in zip(player_data_list, mongo_data):
+                    k = i + j
+                    df_list.append(k)
+                df = analyze_player_data(df_list)
                 print("")
                 print(df)
                 export_to_excel(df)
