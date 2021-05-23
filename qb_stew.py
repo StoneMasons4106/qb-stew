@@ -58,9 +58,20 @@ def search_player(first_name, last_name, pos):
             pos_split_one = str(item).split("</a>  ")
             pos_split_two = pos_split_one[1].split(" (")
             if pos_split_two[0] == pos:
-                url_split_one = pos_split_two[1].split('search-item-url">')
-                url_split_two = url_split_one[1].split('</div>\n<div class="search-item-league">')
-                break
+                try:    
+                    name_split_one = str(item).split("<strong>")
+                    name_split_two = name_split_one[1].split("</strong>")
+                except:
+                    name_split_one = str(item).split(".htm>")
+                    name_split_two = name_split_one[1].split("</a>")
+                if name_split_two[0] == first_name + ' ' + last_name:
+                    url_split_one = pos_split_two[1].split('search-item-url">')
+                    url_split_two = url_split_one[1].split('</div>\n<div class="search-item-league">')
+                    break
+                else:
+                    continue
+            else:
+                continue
         url = "https://www.pro-football-reference.com"+url_split_two[0]
         req2 = requests.get(url)
         soup2 = bs(req2.text, 'html.parser')
@@ -71,7 +82,17 @@ def search_player(first_name, last_name, pos):
         url = "https://www.pro-football-reference.com/players/"+l_last_name[0]+"/"+''.join(l_last_name[0:4])+''.join(l_first_name[0:2])+'00.htm'
         req2 = requests.get(url)
         soup2 = bs(req2.text, 'html.parser')
-        return soup2
+        search_data_2 = soup2.find_all('h1')
+        name_split_one = str(search_data_2[0]).split("<span>")
+        name_split_two = name_split_one[1].split("</span>")
+        name = name_split_two[0]
+        if name == first_name + ' ' + last_name:
+            return soup2
+        else:
+            url2 = "https://www.pro-football-reference.com/players/"+l_last_name[0]+"/"+''.join(l_last_name[0:4])+''.join(l_first_name[0:2])+'01.htm'
+            req3 = requests.get(url2)
+            soup3 = bs(req3.text, 'html.parser')
+            return soup3
 
 
 def get_player_data(year, players):
