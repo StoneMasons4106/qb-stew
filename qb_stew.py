@@ -79,20 +79,18 @@ def search_player(first_name, last_name, pos):
     except:
         l_last_name = list(last_name)
         l_first_name = list(first_name)
-        url = "https://www.pro-football-reference.com/players/"+l_last_name[0]+"/"+''.join(l_last_name[0:4])+''.join(l_first_name[0:2])+'00.htm'
-        req2 = requests.get(url)
-        soup2 = bs(req2.text, 'html.parser')
-        search_data_2 = soup2.find_all('h1')
-        name_split_one = str(search_data_2[0]).split("<span>")
-        name_split_two = name_split_one[1].split("</span>")
-        name = name_split_two[0]
-        if first_name + ' ' + last_name in name:
-            return soup2
-        else:
-            url2 = "https://www.pro-football-reference.com/players/"+l_last_name[0]+"/"+''.join(l_last_name[0:4])+''.join(l_first_name[0:2])+'01.htm'
-            req3 = requests.get(url2)
-            soup3 = bs(req3.text, 'html.parser')
-            return soup3
+        for i in range(9):
+            url = "https://www.pro-football-reference.com/players/"+l_last_name[0]+"/"+''.join(l_last_name[0:4])+''.join(l_first_name[0:2])+'0'+str(i)+'.htm'
+            req2 = requests.get(url)
+            soup2 = bs(req2.text, 'html.parser')
+            search_data_2 = soup2.find_all('h1')
+            name_split_one = str(search_data_2[0]).split("<span>")
+            name_split_two = name_split_one[1].split("</span>")
+            name = name_split_two[0]
+            if first_name + ' ' + last_name in name:
+                return soup2
+            else:
+                continue
 
 
 def get_player_data(year, players):
