@@ -176,11 +176,6 @@ def analyze_player_data(player_data):
     
     print("Analyzing the data...")
     
-    ranks = []
-    
-    for i in enumerate(player_data):
-        ranks.append(int(i[0]) + 1)
-    
     df = pd.DataFrame(player_data, columns=['first', 'last', 'pos', 'rating', 'qbr', 'anya', 'pff', 'dvoa', 'cpoe', 'epa'])
     df['rating rank'] = df['rating'].rank(method='min')
     df['qbr rank'] = df['qbr'].rank(method='min')
