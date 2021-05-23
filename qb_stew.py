@@ -86,7 +86,7 @@ def search_player(first_name, last_name, pos):
         name_split_one = str(search_data_2[0]).split("<span>")
         name_split_two = name_split_one[1].split("</span>")
         name = name_split_two[0]
-        if name == first_name + ' ' + last_name:
+        if first_name + ' ' + last_name in name:
             return soup2
         else:
             url2 = "https://www.pro-football-reference.com/players/"+l_last_name[0]+"/"+''.join(l_last_name[0:4])+''.join(l_first_name[0:2])+'01.htm'
