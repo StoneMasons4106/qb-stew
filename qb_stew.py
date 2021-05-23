@@ -139,14 +139,13 @@ def get_mongo_data(players, conn, coll):
     for player in players:
         try:    
             doc = coll.find_one({"first": player[0], "last": player[1]})
+            pff = doc['pff_grade']
+            dvoa = doc['dvoa']
+            cpoe = doc['cpoe']
+            epa = doc['epa']
+            mongo_player_data.append([float(pff), float(dvoa), float(cpoe), float(epa)])
         except:
             print('No data found for ' + player[0] + ' ' + player[1] + ' in our database')
-            continue
-        pff = doc['pff_grade']
-        dvoa = doc['dvoa']
-        cpoe = doc['cpoe']
-        epa = doc['epa']
-        mongo_player_data.append([float(pff), float(dvoa), float(cpoe), float(epa)])
 
     conn.close()
 
