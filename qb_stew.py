@@ -177,13 +177,13 @@ def analyze_player_data(player_data):
     print("Analyzing the data...")
     
     df = pd.DataFrame(player_data, columns=['first', 'last', 'pos', 'rating', 'qbr', 'anya', 'pff', 'dvoa', 'cpoe', 'epa'])
-    df['rating rank'] = df['rating'].rank(method='min')
-    df['qbr rank'] = df['qbr'].rank(method='min')
-    df['anya rank'] = df['anya'].rank(method='min')
-    df['pff rank'] = df['pff'].rank(method='min')
-    df['dvoa rank'] = df['dvoa'].rank(method='min')
-    df['cpoe rank'] = df['cpoe'].rank(method='min')
-    df['epa rank'] = df['epa'].rank(method='min')
+    df['rating rank'] = df['rating'].rank(method='min', ascending=False)
+    df['qbr rank'] = df['qbr'].rank(method='min', ascending=False)
+    df['anya rank'] = df['anya'].rank(method='min', ascending=False)
+    df['pff rank'] = df['pff'].rank(method='min', ascending=False)
+    df['dvoa rank'] = df['dvoa'].rank(method='min', ascending=False)
+    df['cpoe rank'] = df['cpoe'].rank(method='min', ascending=False)
+    df['epa rank'] = df['epa'].rank(method='min', ascending=False)
     df_last_sort = df.sort_values(by=['last'], ascending=True)
     df_last_sort['qb stew'] = (df_last_sort['rating rank'] + df_last_sort['qbr rank'] + df_last_sort['anya rank'] + df_last_sort['pff rank'] + df_last_sort['dvoa rank'] + df_last_sort['cpoe rank'] + df_last_sort['epa rank']) / 7
     
