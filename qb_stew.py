@@ -153,6 +153,8 @@ def mongo_connect(url):
 
 def get_mongo_data(players, conn, coll):
 
+    """Sorts through the MongoDB data by taking the conn and coll variable from mongo_connect()"""
+
     mongo_player_data = []
 
     for player in players:
@@ -192,6 +194,8 @@ def analyze_player_data(player_data):
 
 
 def export_to_excel(dataframe):
+
+    """Exports the data to local Excel file in the same directory as this file"""
     
     print("")
     
